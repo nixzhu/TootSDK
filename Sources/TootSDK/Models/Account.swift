@@ -14,6 +14,7 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         note: String,
         avatar: String,
         avatarStatic: String? = nil,
+        avatarDescription: String? = nil,
         header: String,
         headerStatic: String,
         locked: Bool,
@@ -45,6 +46,7 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         self.note = note
         self.avatar = avatar
         self.avatarStatic = avatarStatic
+        self.avatarDescription = avatarDescription
         self.header = header
         self.headerStatic = headerStatic
         self.locked = locked
@@ -79,6 +81,7 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         self.note = try container.decode(String.self, forKey: .note)
         self.avatar = try container.decode(String.self, forKey: .avatar)
         self.avatarStatic = try? container.decodeIfPresent(String.self, forKey: .avatarStatic)
+        self.avatarDescription = try? container.decodeIfPresent(String.self, forKey: .avatarDescription)
         // pixelfed doesn't include headers in block/mute lists
         self.header = (try? container.decodeIfPresent(String.self, forKey: .header)) ?? ""
         self.headerStatic = (try? container.decodeIfPresent(String.self, forKey: .headerStatic)) ?? ""
@@ -123,6 +126,8 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
     public let avatar: String
     /// A static version of the avatar.
     public let avatarStatic: String?
+    /// A textual description of the avatar image.
+    public let avatarDescription: String?
     /// An image banner that is shown above the profile and in profile cards
     public let header: String
     /// A static version of the header
@@ -182,6 +187,7 @@ extension Account {
         case note
         case avatar
         case avatarStatic
+        case avatarDescription
         case header
         case headerStatic
         case locked
@@ -218,6 +224,7 @@ extension Account: Hashable {
         hasher.combine(note)
         hasher.combine(avatar)
         hasher.combine(avatarStatic)
+        hasher.combine(avatarDescription)
         hasher.combine(header)
         hasher.combine(headerStatic)
         hasher.combine(locked)
