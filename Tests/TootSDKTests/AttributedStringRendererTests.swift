@@ -181,7 +181,10 @@
             #expect(renderedDefault.attributedString == attributedString)
         }
 
-        private let enUS = BlockQuoteStyle(locale: Locale(identifier: "en_US"))
+        @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+        private var enUS: BlockQuoteStyle {
+            BlockQuoteStyle(locale: Locale(identifier: "en_US"))
+        }
 
         @Test func htmlWithSingleLevelBlockQuote() async throws {
             guard #available(macOS 12, iOS 15, tvOS 15, watchOS 8, *) else { return }
