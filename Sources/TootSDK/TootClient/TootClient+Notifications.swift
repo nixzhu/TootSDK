@@ -204,6 +204,10 @@ extension TootClient {
             queryParameters.append(contentsOf: types.map({ .init(name: "exclude_types[]", value: $0.rawValue(flavour: flavour)) }))
         }
 
+        if let types = params.supportedTypes, !types.isEmpty {
+            queryParameters.append(contentsOf: types.map({ .init(name: "supported_types[]", value: $0.rawValue(flavour: flavour)) }))
+        }
+
         return queryParameters
     }
 

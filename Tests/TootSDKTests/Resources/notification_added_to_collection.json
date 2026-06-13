@@ -1,0 +1,42 @@
+{
+  "id": "1001",
+  "type": "added_to_collection",
+  "created_at": "2025-06-01T10:00:00.000Z",
+  "account": {
+    "id": "13179",
+    "username": "Mastodon",
+    "acct": "Mastodon",
+    "display_name": "Mastodon",
+    "locked": false,
+    "bot": false,
+    "created_at": "2016-11-23T00:00:00.000Z",
+    "note": "<p>Free, open-source decentralized social media platform.</p>",
+    "url": "https://mastodon.social/@Mastodon",
+    "uri": "https://mastodon.social/users/Mastodon",
+    "avatar": "https://files.mastodon.social/accounts/avatars/000/013/179/original/b4ceb19c9c54ec7e.png",
+    "avatar_static": "https://files.mastodon.social/accounts/avatars/000/013/179/original/b4ceb19c9c54ec7e.png",
+    "header": "https://files.mastodon.social/accounts/headers/000/013/179/original/1375be116fbe0f1d.png",
+    "header_static": "https://files.mastodon.social/accounts/headers/000/013/179/original/1375be116fbe0f1d.png",
+    "followers_count": 814295,
+    "following_count": 3,
+    "statuses_count": 262,
+    "last_status_at": "2024-02-28",
+    "emojis": [],
+    "fields": []
+  },
+  "collection": {
+    "id": "42",
+    "uri": "https://mastodon.example/collections/42",
+    "url": "https://mastodon.example/@alice/collections/42",
+    "name": "Swift Developers",
+    "description": "A collection of Swift developers.",
+    "language": "en",
+    "account_id": "101",
+    "local": true,
+    "sensitive": false,
+    "discoverable": true,
+    "item_count": 2,
+    "created_at": "2024-05-01T12:00:00.000Z",
+    "updated_at": "2024-05-10T08:30:00.000Z"
+  }
+}

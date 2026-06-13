@@ -1,0 +1,19 @@
+import ArgumentParser
+import Foundation
+import TootSDK
+
+struct MarkAnnualReportRead: AsyncParsableCommand {
+    @OptionGroup var auth: AuthOptions
+
+    @Option(name: .long, help: "The four-digit year of the report.")
+    var year: Int
+
+    func run() async throws {
+        let client = try await TootClient(connect: auth.url, accessToken: auth.token)
+        if auth.verbose {
+            client.debugOn()
+        }
+        try await client.markAnnualReportRead(year: year)
+        print("Marked annual report \(year) as read")
+    }
+}

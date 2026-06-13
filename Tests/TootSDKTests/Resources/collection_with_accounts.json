@@ -1,0 +1,46 @@
+{
+  "collection": {
+    "id": "42",
+    "uri": "https://mastodon.example/collections/42",
+    "url": "https://mastodon.example/@alice/collections/42",
+    "name": "Swift Developers",
+    "description": "A collection of Swift developers.",
+    "language": "en",
+    "account_id": "101",
+    "local": true,
+    "sensitive": false,
+    "discoverable": true,
+    "item_count": 1,
+    "created_at": "2024-05-01T12:00:00.000Z",
+    "updated_at": "2024-05-10T08:30:00.000Z",
+    "items": [
+      {
+        "id": "1",
+        "state": "accepted",
+        "account_id": "201",
+        "created_at": "2024-05-01T12:01:00.000Z"
+      }
+    ]
+  },
+  "accounts": [
+    {
+      "id": "201",
+      "username": "swiftdev",
+      "acct": "swiftdev@mastodon.example",
+      "url": "https://mastodon.example/@swiftdev",
+      "display_name": "Swift Dev",
+      "note": "<p>I write Swift.</p>",
+      "avatar": "https://mastodon.example/avatars/original/missing.png",
+      "avatar_static": "https://mastodon.example/avatars/original/missing.png",
+      "header": "https://mastodon.example/headers/original/missing.png",
+      "header_static": "https://mastodon.example/headers/original/missing.png",
+      "locked": false,
+      "emojis": [],
+      "created_at": "2022-01-01T00:00:00.000Z",
+      "statuses_count": 10,
+      "followers_count": 5,
+      "following_count": 3,
+      "fields": []
+    }
+  ]
+}

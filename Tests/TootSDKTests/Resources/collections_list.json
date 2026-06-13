@@ -1,0 +1,29 @@
+{
+  "collections": [
+    {
+      "id": "42",
+      "uri": "https://mastodon.example/collections/42",
+      "url": "https://mastodon.example/@alice/collections/42",
+      "name": "Swift Developers",
+      "description": "A collection of Swift developers.",
+      "language": "en",
+      "account_id": "101",
+      "local": true,
+      "sensitive": false,
+      "discoverable": true,
+      "item_count": 2,
+      "created_at": "2024-05-01T12:00:00.000Z",
+      "updated_at": "2024-05-10T08:30:00.000Z"
+    },
+    {
+      "id": "99",
+      "uri": "https://mastodon.example/collections/99",
+      "url": "https://mastodon.example/@alice/collections/99",
+      "name": "Designers",
+      "account_id": "101",
+      "item_count": 0,
+      "created_at": "2024-06-01T10:00:00.000Z",
+      "updated_at": "2024-06-01T10:00:00.000Z"
+    }
+  ]
+}
