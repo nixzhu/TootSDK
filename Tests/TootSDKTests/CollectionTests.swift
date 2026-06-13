@@ -96,4 +96,45 @@ final class CollectionTests: XCTestCase {
         let version450 = Version(tolerant: "4.5.0")
         XCTAssertFalse(TootFeature.collections.isSupported(flavour: .mastodon, version: version450, apiVersions: nil))
     }
+
+    func testCollectionsListWrappedDecode() throws {
+        let json = localContent("collections_list")
+        let decoder = TootDecoder()
+
+        let container = try decoder.decode(CollectionsListContainer.self, from: json)
+
+        XCTAssertEqual(container.collections.count, 2)
+        XCTAssertEqual(container.collections[0].id, "42")
+        XCTAssertEqual(container.collections[0].name, "Swift Developers")
+        XCTAssertEqual(container.collections[0].itemCount, 2)
+        XCTAssertEqual(container.collections[1].id, "99")
+        XCTAssertEqual(container.collections[1].name, "Designers")
+    }
+
+    func testCollectionCreateResponseWrappedDecode() throws {
+        let json = localContent("collection_create_response")
+        let decoder = TootDecoder()
+
+        let container = try decoder.decode(CollectionContainer.self, from: json)
+        let collection = container.collection
+
+        XCTAssertEqual(collection.id, "55")
+        XCTAssertEqual(collection.name, "iOS Engineers")
+        XCTAssertEqual(collection.accountId, "101")
+        XCTAssertEqual(collection.discoverable, false)
+        XCTAssertEqual(collection.itemCount, 0)
+    }
+
+    func testCollectionItemResponseWrappedDecode() throws {
+        let json = localContent("collection_item_response")
+        let decoder = TootDecoder()
+
+        let container = try decoder.decode(CollectionItemContainer.self, from: json)
+        let item = container.collectionItem
+
+        XCTAssertEqual(item.id, "77")
+        XCTAssertEqual(item.state, .some(.pending))
+        XCTAssertEqual(item.accountId, "303")
+        XCTAssertNotNil(item.createdAt)
+    }
 }

@@ -384,6 +384,18 @@ extension TootClient {
     internal func fetchPagedResultRaw<T: Decodable>(_ req: HTTPRequestBuilder) async throws -> TootResponse<PagedResult<[T]>> {
         let (data, response) = try await fetch(req: req)
         let decoded = try decode([T].self, from: data)
+        return makePagedResultResponse(decoded: decoded, response: response, data: data)
+    }
+
+    /// Assembles a TootResponse<PagedResult> from an already-decoded array and the raw HTTP response.
+    ///
+    /// Callers that decode a wrapped body (e.g. `{"collections":[...]}`) extract the inner array
+    /// themselves, then delegate pagination assembly here to avoid duplicating the Link-header logic.
+    internal func makePagedResultResponse<T: Decodable>(
+        decoded: [T],
+        response: HTTPURLResponse,
+        data: Data
+    ) -> TootResponse<PagedResult<[T]>> {
         var pagination: Pagination?
 
         if let links = response.value(forHTTPHeaderField: "Link") {
@@ -397,7 +409,6 @@ extension TootClient {
 
         let pagedResult = PagedResult(result: decoded, info: info, nextPage: nextPage, previousPage: previousPage)
 
-        // Convert HTTPURLResponse headers to [String: String]
         var headers: [String: String] = [:]
         for (key, value) in response.allHeaderFields {
             if let keyString = key as? String, let valueString = value as? String {

@@ -2,26 +2,9 @@ import Foundation
 
 extension TootClient {
 
-    /// Fetch all collections owned by the authenticated user.
-    /// - Returns: a PagedResult with an array of collections if successful, throws an error if not
-    public func getCollections(_ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> PagedResult<[Collection]> {
-        let response = try await getCollectionsRaw(pageInfo, limit: limit)
-        return response.data
-    }
-
-    /// Fetch all collections owned by the authenticated user with HTTP response metadata.
-    /// - Returns: TootResponse containing paginated collections and HTTP metadata
-    public func getCollectionsRaw(_ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> TootResponse<PagedResult<[Collection]>> {
-        try requireFeature(.collections)
-        let req = HTTPRequestBuilder {
-            $0.url = getURL(["api", "v1", "collections"])
-            $0.method = .get
-            $0.query = getQueryParams(pageInfo, limit: limit)
-        }
-        return try await fetchPagedResultRaw(req)
-    }
-
-    /// Fetch all collections that a given account is a member of.
+    /// Fetch all collections that a given account owns.
+    ///
+    /// Paginated via offset-based Link headers (`?offset=N&limit=M`).
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: a PagedResult with an array of collections if successful, throws an error if not
@@ -30,7 +13,9 @@ extension TootClient {
         return response.data
     }
 
-    /// Fetch all collections that a given account is a member of with HTTP response metadata.
+    /// Fetch all collections that a given account owns, with HTTP response metadata.
+    ///
+    /// Paginated via offset-based Link headers (`?offset=N&limit=M`).
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: TootResponse containing paginated collections and HTTP metadata
@@ -41,10 +26,12 @@ extension TootClient {
             $0.method = .get
             $0.query = getQueryParams(pageInfo, limit: limit)
         }
-        return try await fetchPagedResultRaw(req)
+        return try await fetchPagedCollectionsRaw(req)
     }
 
     /// Fetch all collections an account appears in (as seen by the authenticated user).
+    ///
+    /// Paginated via offset-based Link headers (`?offset=N&limit=M`).
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: a PagedResult with an array of collections if successful, throws an error if not
@@ -53,7 +40,9 @@ extension TootClient {
         return response.data
     }
 
-    /// Fetch all collections an account appears in (as seen by the authenticated user) with HTTP response metadata.
+    /// Fetch all collections an account appears in (as seen by the authenticated user), with HTTP response metadata.
+    ///
+    /// Paginated via offset-based Link headers (`?offset=N&limit=M`).
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: TootResponse containing paginated collections and HTTP metadata
@@ -64,7 +53,7 @@ extension TootClient {
             $0.method = .get
             $0.query = getQueryParams(pageInfo, limit: limit)
         }
-        return try await fetchPagedResultRaw(req)
+        return try await fetchPagedCollectionsRaw(req)
     }
 
     /// Fetch a collection by ID, including its member accounts.
@@ -109,7 +98,8 @@ extension TootClient {
             $0.method = .post
             $0.body = try .json(params, encoder: self.encoder)
         }
-        return try await fetchRaw(Collection.self, req)
+        let wrapped = try await fetchRaw(CollectionContainer.self, req)
+        return TootResponse(data: wrapped.data.collection, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
     }
 
     /// Update an existing collection.
@@ -134,7 +124,8 @@ extension TootClient {
             $0.method = .patch
             $0.body = try .json(params, encoder: self.encoder)
         }
-        return try await fetchRaw(Collection.self, req)
+        let wrapped = try await fetchRaw(CollectionContainer.self, req)
+        return TootResponse(data: wrapped.data.collection, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
     }
 
     /// Delete a collection.
@@ -172,7 +163,8 @@ extension TootClient {
             $0.method = .post
             $0.body = try .json(body, encoder: self.encoder)
         }
-        return try await fetchRaw(CollectionItem.self, req)
+        let wrapped = try await fetchRaw(CollectionItemContainer.self, req)
+        return TootResponse(data: wrapped.data.collectionItem, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
     }
 
     /// Remove an item from a collection.
@@ -193,22 +185,43 @@ extension TootClient {
     ///   - id: The ID of the collection.
     ///   - itemId: The ID of the collection item to revoke.
     public func revokeCollectionItem(id: String, itemId: String) async throws {
-        let _ = try await revokeCollectionItemRaw(id: id, itemId: itemId)
-    }
-
-    /// Revoke an account's membership in a collection with HTTP response metadata.
-    /// - Parameters:
-    ///   - id: The ID of the collection.
-    ///   - itemId: The ID of the collection item to revoke.
-    /// - Returns: TootResponse containing the updated collection item and HTTP metadata
-    public func revokeCollectionItemRaw(id: String, itemId: String) async throws -> TootResponse<CollectionItem> {
         try requireFeature(.collections)
         let req = HTTPRequestBuilder {
             $0.url = getURL(["api", "v1", "collections", id, "items", itemId, "revoke"])
             $0.method = .post
         }
-        return try await fetchRaw(CollectionItem.self, req)
+        _ = try await fetch(req: req)
     }
+}
+
+// MARK: - Private helpers
+
+extension TootClient {
+
+    /// Fetches a request whose body is `{"collections":[...]}` and assembles a PagedResult
+    /// using the offset-based Link header pagination.
+    private func fetchPagedCollectionsRaw(_ req: HTTPRequestBuilder) async throws -> TootResponse<PagedResult<[Collection]>> {
+        let (data, response) = try await fetch(req: req)
+        let container = try decode(CollectionsListContainer.self, from: data)
+        return makePagedResultResponse(decoded: container.collections, response: response, data: data)
+    }
+}
+
+// MARK: - Response wrapper types
+
+/// Decodes `{"collections": [...]}` list responses.
+struct CollectionsListContainer: Decodable {
+    let collections: [Collection]
+}
+
+/// Decodes `{"collection": {...}}` single-object responses (create / update).
+struct CollectionContainer: Decodable {
+    let collection: Collection
+}
+
+/// Decodes `{"collection_item": {...}}` responses (add account to collection).
+struct CollectionItemContainer: Decodable {
+    let collectionItem: CollectionItem
 }
 
 extension TootFeature {
