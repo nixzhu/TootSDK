@@ -49,7 +49,8 @@ final class CollectionTests: XCTestCase {
     }
 
     func testCollectionItemUnknownStateDecode() throws {
-        let json = Data("""
+        let json = Data(
+            """
             {"id":"99","state":"something_new","account_id":"300","created_at":"2024-01-01T00:00:00.000Z"}
             """.utf8)
         let decoder = TootDecoder()

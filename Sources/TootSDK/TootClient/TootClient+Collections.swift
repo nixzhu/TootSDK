@@ -19,7 +19,9 @@ extension TootClient {
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: TootResponse containing paginated collections and HTTP metadata
-    public func getAccountCollectionsRaw(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> TootResponse<PagedResult<[Collection]>> {
+    public func getAccountCollectionsRaw(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> TootResponse<
+        PagedResult<[Collection]>
+    > {
         try requireFeature(.collections)
         let req = HTTPRequestBuilder {
             $0.url = getURL(["api", "v1", "accounts", accountId, "collections"])
@@ -35,7 +37,8 @@ extension TootClient {
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: a PagedResult with an array of collections if successful, throws an error if not
-    public func getAccountInCollections(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> PagedResult<[Collection]> {
+    public func getAccountInCollections(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> PagedResult<[Collection]>
+    {
         let response = try await getAccountInCollectionsRaw(accountId: accountId, pageInfo, limit: limit)
         return response.data
     }
@@ -46,7 +49,9 @@ extension TootClient {
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: TootResponse containing paginated collections and HTTP metadata
-    public func getAccountInCollectionsRaw(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> TootResponse<PagedResult<[Collection]>> {
+    public func getAccountInCollectionsRaw(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> TootResponse<
+        PagedResult<[Collection]>
+    > {
         try requireFeature(.collections)
         let req = HTTPRequestBuilder {
             $0.url = getURL(["api", "v1", "accounts", accountId, "in_collections"])
@@ -99,7 +104,8 @@ extension TootClient {
             $0.body = try .json(params, encoder: self.encoder)
         }
         let wrapped = try await fetchRaw(CollectionContainer.self, req)
-        return TootResponse(data: wrapped.data.collection, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
+        return TootResponse(
+            data: wrapped.data.collection, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
     }
 
     /// Update an existing collection.
@@ -125,7 +131,8 @@ extension TootClient {
             $0.body = try .json(params, encoder: self.encoder)
         }
         let wrapped = try await fetchRaw(CollectionContainer.self, req)
-        return TootResponse(data: wrapped.data.collection, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
+        return TootResponse(
+            data: wrapped.data.collection, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
     }
 
     /// Delete a collection.
@@ -164,7 +171,8 @@ extension TootClient {
             $0.body = try .json(body, encoder: self.encoder)
         }
         let wrapped = try await fetchRaw(CollectionItemContainer.self, req)
-        return TootResponse(data: wrapped.data.collectionItem, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
+        return TootResponse(
+            data: wrapped.data.collectionItem, headers: wrapped.headers, statusCode: wrapped.statusCode, url: wrapped.url, rawBody: wrapped.rawBody)
     }
 
     /// Remove an item from a collection.
