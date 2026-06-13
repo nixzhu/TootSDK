@@ -22,4 +22,18 @@ final class CardTests: XCTestCase {
         XCTAssertEqual(result.width, 520)
         XCTAssertEqual(result.height, 347)
     }
+
+    func testDecodeMissingAttribution() throws {
+        // arrange
+        let json = localContent("card_missing_attribution")
+        let decoder = TootDecoder()
+
+        // act
+        let result = try decoder.decode(Card.self, from: json)
+
+        // assert
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result.title, "Example Article")
+        XCTAssertEqual(result.missingAttribution, true)
+    }
 }

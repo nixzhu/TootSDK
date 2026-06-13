@@ -17,6 +17,7 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         avatarDescription: String? = nil,
         header: String,
         headerStatic: String,
+        headerDescription: String? = nil,
         locked: Bool,
         emojis: [Emoji],
         discoverable: Bool? = nil,
@@ -37,6 +38,9 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         source: TootSource? = nil,
         role: TootRole? = nil,
         muteExpiresAt: Date? = nil,
+        showMedia: Bool? = nil,
+        showMediaReplies: Bool? = nil,
+        showFeatured: Bool? = nil,
     ) {
         self.id = id
         self.username = username
@@ -49,6 +53,7 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         self.avatarDescription = avatarDescription
         self.header = header
         self.headerStatic = headerStatic
+        self.headerDescription = headerDescription
         self.locked = locked
         self.emojis = emojis
         self.discoverable = discoverable
@@ -69,6 +74,9 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         self.source = source
         self.role = role
         self.muteExpiresAt = muteExpiresAt
+        self.showMedia = showMedia
+        self.showMediaReplies = showMediaReplies
+        self.showFeatured = showFeatured
     }
 
     required public init(from decoder: Decoder) throws {
@@ -85,6 +93,7 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         // pixelfed doesn't include headers in block/mute lists
         self.header = (try? container.decodeIfPresent(String.self, forKey: .header)) ?? ""
         self.headerStatic = (try? container.decodeIfPresent(String.self, forKey: .headerStatic)) ?? ""
+        self.headerDescription = try? container.decodeIfPresent(String.self, forKey: .headerDescription)
         self.locked = try container.decode(Bool.self, forKey: .locked)
         // pixelfed doesn't include emojis in block/mute lists
         self.emojis = (try? container.decodeIfPresent([Emoji].self, forKey: .emojis)) ?? []
@@ -108,6 +117,9 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
         self.source = try? container.decodeIfPresent(TootSource.self, forKey: .source)
         self.role = try? container.decodeIfPresent(TootRole.self, forKey: .role)
         self.muteExpiresAt = try? container.decodeIfPresent(Date.self, forKey: .muteExpiresAt)
+        self.showMedia = try? container.decodeIfPresent(Bool.self, forKey: .showMedia)
+        self.showMediaReplies = try? container.decodeIfPresent(Bool.self, forKey: .showMediaReplies)
+        self.showFeatured = try? container.decodeIfPresent(Bool.self, forKey: .showFeatured)
     }
 
     /// The account id.
@@ -132,6 +144,8 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
     public let header: String
     /// A static version of the header
     public let headerStatic: String
+    /// A textual description of the header image.
+    public let headerDescription: String?
     /// Whether the account manually approves follow requests
     public let locked: Bool
     /// Custom emoji entities to be used when rendering the profile. If none, an empty array will be returned
@@ -175,6 +189,12 @@ public class Account: Codable, Identifiable, @unchecked Sendable {
     public let role: TootRole?
     /// When a timed mute will expire, if applicable. `nil` if the mute is indefinite.
     public let muteExpiresAt: Date?
+    /// Whether media should be shown for this account's posts.
+    public let showMedia: Bool?
+    /// Whether media should be shown for this account's replies.
+    public let showMediaReplies: Bool?
+    /// Whether featured posts are shown on this account's profile.
+    public let showFeatured: Bool?
 }
 
 extension Account {
@@ -190,6 +210,7 @@ extension Account {
         case avatarDescription
         case header
         case headerStatic
+        case headerDescription
         case locked
         case emojis
         case discoverable
@@ -210,6 +231,9 @@ extension Account {
         case source
         case role
         case muteExpiresAt
+        case showMedia
+        case showMediaReplies
+        case showFeatured
     }
 }
 
@@ -227,6 +251,7 @@ extension Account: Hashable {
         hasher.combine(avatarDescription)
         hasher.combine(header)
         hasher.combine(headerStatic)
+        hasher.combine(headerDescription)
         hasher.combine(locked)
         hasher.combine(emojis)
         hasher.combine(discoverable)
@@ -246,6 +271,9 @@ extension Account: Hashable {
         hasher.combine(group)
         hasher.combine(source)
         hasher.combine(role)
+        hasher.combine(showMedia)
+        hasher.combine(showMediaReplies)
+        hasher.combine(showFeatured)
     }
 
     public static func == (lhs: Account, rhs: Account) -> Bool {

@@ -7,7 +7,8 @@ import Foundation
 public struct UserTimelineQuery: Sendable {
 
     public init(
-        userId: String, onlyMedia: Bool? = nil, excludeReplies: Bool? = nil, excludeBoosts: Bool? = nil, pinned: Bool? = nil, tagged: String? = nil
+        userId: String, onlyMedia: Bool? = nil, excludeReplies: Bool? = nil, excludeBoosts: Bool? = nil, pinned: Bool? = nil, tagged: String? = nil,
+        excludeDirect: Bool? = nil
     ) {
         self.userId = userId
         self.onlyMedia = onlyMedia
@@ -15,6 +16,7 @@ public struct UserTimelineQuery: Sendable {
         self.excludeBoosts = excludeBoosts
         self.pinned = pinned
         self.tagged = tagged
+        self.excludeDirect = excludeDirect
     }
 
     /// The id of the user
@@ -34,6 +36,9 @@ public struct UserTimelineQuery: Sendable {
 
     /// Filter for posts using a specific hashtag
     public var tagged: String?
+
+    /// Filter out direct messages
+    public var excludeDirect: Bool?
 }
 
 extension UserTimelineQuery: TimelineQuery {
@@ -59,6 +64,10 @@ extension UserTimelineQuery: TimelineQuery {
 
         if let tagged {
             queryItems.append(.init(name: "tagged", value: tagged))
+        }
+
+        if let excludeDirect {
+            queryItems.append(.init(name: "exclude_direct", value: String(excludeDirect)))
         }
 
         return queryItems

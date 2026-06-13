@@ -32,6 +32,8 @@ public struct InstanceV2: Codable, Hashable, Sendable {
     public var contact: ContactInfo?
     /// An itemized list of rules for this instance.
     public var rules: [InstanceRule]?
+    /// The campaign year for the Wrapstodon feature, if active.
+    public var wrapstodon: Int?
 
     public init(
         domain: String? = nil,
@@ -47,7 +49,8 @@ public struct InstanceV2: Codable, Hashable, Sendable {
         registrations: Registrations,
         apiVersions: APIVersions? = nil,
         contact: ContactInfo? = nil,
-        rules: [InstanceRule]? = nil
+        rules: [InstanceRule]? = nil,
+        wrapstodon: Int? = nil
     ) {
         self.domain = domain
         self.title = title
@@ -63,6 +66,7 @@ public struct InstanceV2: Codable, Hashable, Sendable {
         self.apiVersions = apiVersions
         self.contact = contact
         self.rules = rules
+        self.wrapstodon = wrapstodon
     }
 
     public init(from decoder: any Decoder) throws {
@@ -88,6 +92,7 @@ public struct InstanceV2: Codable, Hashable, Sendable {
         self.apiVersions = try container.decodeIfPresent(InstanceV2.APIVersions.self, forKey: .apiVersions)
         self.contact = try container.decodeIfPresent(InstanceV2.ContactInfo.self, forKey: .contact)
         self.rules = try container.decodeIfPresent([InstanceRule].self, forKey: .rules)
+        self.wrapstodon = try container.decodeIfPresent(Int.self, forKey: .wrapstodon)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -105,6 +110,7 @@ public struct InstanceV2: Codable, Hashable, Sendable {
         case apiVersions
         case contact
         case rules
+        case wrapstodon
     }
 
     /// Usage data of an instance.
@@ -147,10 +153,11 @@ public struct InstanceV2: Codable, Hashable, Sendable {
             }
         }
 
-        public init(url: String, blurhash: String? = nil, versions: Versions? = nil) {
+        public init(url: String, blurhash: String? = nil, versions: Versions? = nil, description: String? = nil) {
             self.url = url
             self.blurhash = blurhash
             self.versions = versions
+            self.description = description
         }
 
         /// URL for the thumbnail image.
@@ -159,6 +166,8 @@ public struct InstanceV2: Codable, Hashable, Sendable {
         public var blurhash: String?
         /// Scaled resolution versions of the image intended for various DPI screens.
         public var versions: Versions?
+        /// A textual description of the thumbnail image.
+        public var description: String?
     }
 
     public struct Icon: Codable, Hashable, Sendable {

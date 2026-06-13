@@ -1,0 +1,17 @@
+{
+    "url": "https://example.com/article",
+    "title": "Example Article",
+    "description": "Lorem ipsum dolor sit amet",
+    "type": "link",
+    "missing_attribution": true,
+    "author_name": "",
+    "author_url": "",
+    "provider_name": "Example",
+    "provider_url": "https://example.com",
+    "html": "",
+    "width": 0,
+    "height": 0,
+    "image": null,
+    "blurhash": null,
+    "embed_url": ""
+}

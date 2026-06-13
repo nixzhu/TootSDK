@@ -23,7 +23,8 @@ public struct Card: Codable, Hashable, Sendable {
         image: String? = nil,
         imageDescription: String? = nil,
         embedUrl: String? = nil,
-        blurhash: String? = nil
+        blurhash: String? = nil,
+        missingAttribution: Bool? = nil
     ) {
         self.url = url
         self.title = title
@@ -43,6 +44,7 @@ public struct Card: Codable, Hashable, Sendable {
         self.imageDescription = imageDescription
         self.embedUrl = embedUrl
         self.blurhash = blurhash
+        self.missingAttribution = missingAttribution
     }
 
     public enum CardType: String, Codable, Hashable, Sendable {
@@ -101,6 +103,8 @@ public struct Card: Codable, Hashable, Sendable {
     public var embedUrl: String?
     /// A hash computed by the BlurHash algorithm, for generating colorful preview thumbnails when media has not been downloaded yet.
     public var blurhash: String?
+    /// Whether the linked resource lacks proper attribution information. Only present when authenticated.
+    public var missingAttribution: Bool?
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -122,5 +126,6 @@ public struct Card: Codable, Hashable, Sendable {
         self.imageDescription = try container.decodeIfPresent(String.self, forKey: .imageDescription)
         self.embedUrl = try container.decodeIfPresent(String.self, forKey: .embedUrl)
         self.blurhash = try container.decodeIfPresent(String.self, forKey: .blurhash)
+        self.missingAttribution = try container.decodeIfPresent(Bool.self, forKey: .missingAttribution)
     }
 }

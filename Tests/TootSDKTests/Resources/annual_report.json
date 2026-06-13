@@ -1,0 +1,80 @@
+{
+    "annual_reports": [
+        {
+            "year": 2024,
+            "schema_version": 2,
+            "share_url": "https://mastodon.example/wrapstodon/@alice/2024/abc123def456",
+            "account_id": "123456789",
+            "data": {
+                "archetype": "oracle",
+                "top_statuses": {
+                    "by_reblogs": "112345678901234567",
+                    "by_favourites": null,
+                    "by_replies": null
+                },
+                "top_hashtags": [
+                    {
+                        "name": "swift",
+                        "count": 12
+                    }
+                ],
+                "time_series": [
+                    {
+                        "month": 12,
+                        "statuses": 47,
+                        "followers": 5
+                    }
+                ]
+            }
+        }
+    ],
+    "accounts": [],
+    "statuses": [
+        {
+            "id": "112345678901234567",
+            "created_at": "2024-06-01T12:00:00.000Z",
+            "in_reply_to_id": null,
+            "in_reply_to_account_id": null,
+            "sensitive": false,
+            "spoiler_text": "",
+            "visibility": "public",
+            "language": "en",
+            "uri": "https://mastodon.example/users/alice/statuses/112345678901234567",
+            "url": "https://mastodon.example/@alice/112345678901234567",
+            "replies_count": 2,
+            "reblogs_count": 14,
+            "favourites_count": 8,
+            "edited_at": null,
+            "content": "<p>Hello from the annual report fixture.</p>",
+            "reblog": null,
+            "application": null,
+            "account": {
+                "id": "123456789",
+                "username": "alice",
+                "acct": "alice",
+                "display_name": "Alice",
+                "locked": false,
+                "bot": false,
+                "created_at": "2022-01-01T00:00:00.000Z",
+                "note": "<p>Test account.</p>",
+                "url": "https://mastodon.example/@alice",
+                "avatar": "https://mastodon.example/avatars/alice.jpg",
+                "avatar_static": "https://mastodon.example/avatars/alice.jpg",
+                "header": "https://mastodon.example/headers/alice.jpg",
+                "header_static": "https://mastodon.example/headers/alice.jpg",
+                "followers_count": 200,
+                "following_count": 100,
+                "statuses_count": 500,
+                "last_status_at": "2024-12-31",
+                "emojis": [],
+                "fields": []
+            },
+            "media_attachments": [],
+            "mentions": [],
+            "tags": [],
+            "emojis": [],
+            "card": null,
+            "poll": null
+        }
+    ]
+}

@@ -12,7 +12,9 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
         createdAt: Date,
         post: Post? = nil,
         report: Report? = nil,
-        relationshipSeveranceEvent: RelationshipSeveranceEvent? = nil
+        relationshipSeveranceEvent: RelationshipSeveranceEvent? = nil,
+        collection: Collection? = nil,
+        fallback: NotificationFallback? = nil
     ) {
         self.id = id
         self.type = type
@@ -21,6 +23,8 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
         self.post = post
         self.report = report
         self.relationshipSeveranceEvent = relationshipSeveranceEvent
+        self.collection = collection
+        self.fallback = fallback
     }
 
     /// The id of the notification in the database.
@@ -37,6 +41,10 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
     public var report: Report?
     /// Summary of the event that caused follow relationships to be severed. Attached when type of the notification is ``NotificationType/severedRelationships``.
     public var relationshipSeveranceEvent: RelationshipSeveranceEvent?
+    /// The collection associated with the notification. Attached when type is ``NotificationType/addedToCollection`` or ``NotificationType/collectionUpdate``.
+    public var collection: Collection?
+    /// Fallback rendering attributes for unsupported non-baseline notification types when the client sends ``supported_types``.
+    public var fallback: NotificationFallback?
     /// The used emoji, available if type is ``NotificationType/emojiReaction`` and flavour provides it.
     public var emoji: String?
 
@@ -71,6 +79,10 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
         case emojiReaction
         /// Annual report is available
         case annualReport
+        /// The authenticated account was added to a collection
+        case addedToCollection
+        /// A collection the authenticated account is in was updated
+        case collectionUpdate
 
         /// An unsupported notification type was received. If you encounter this please update TootSDK by adding support for received type.
         case unknown(String)
@@ -120,6 +132,10 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
                 self = .emojiReaction
             case "annual_report":
                 self = .annualReport
+            case "added_to_collection":
+                self = .addedToCollection
+            case "collection_update":
+                self = .collectionUpdate
             default:
                 self = .unknown(rawValue)
             }
@@ -142,6 +158,8 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
             case .severedRelationships: return "severed_relationships"
             case .emojiReaction: return "emoji_reaction"
             case .annualReport: return "annual_report"
+            case .addedToCollection: return "added_to_collection"
+            case .collectionUpdate: return "collection_update"
             case .unknown(let rawValue): return rawValue
             }
         }
@@ -177,6 +195,8 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
                 .severedRelationships,
                 .emojiReaction,
                 .annualReport,
+                .addedToCollection,
+                .collectionUpdate,
             ]
         }
 
@@ -186,7 +206,7 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
             case .mastodon:
                 return [
                     .follow, .mention, .repost, .favourite, .poll, .followRequest, .post, .update, .quote, .quotedUpdate,
-                    .adminSignUp, .adminReport, .severedRelationships, .annualReport,
+                    .adminSignUp, .adminReport, .severedRelationships, .annualReport, .addedToCollection, .collectionUpdate,
                 ]
             case .pleroma, .akkoma:
                 return [.follow, .mention, .repost, .favourite, .poll, .followRequest, .update, .emojiReaction]
@@ -240,6 +260,8 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
         case post = "status"
         case report
         case relationshipSeveranceEvent = "relationship_severance_event"
+        case collection
+        case fallback
         case emoji
     }
 }

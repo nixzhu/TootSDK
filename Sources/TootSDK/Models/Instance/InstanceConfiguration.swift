@@ -85,15 +85,53 @@ public struct InstanceConfiguration: Codable, Hashable, Sendable {
         public var maxFeaturedTags: Int?
         /// The maximum number of pinned posts for each account.
         public var maxPinnedPosts: Int?
+        /// The maximum length of a profile note, in characters.
+        public var maxNoteLength: Int?
+        /// The maximum length of a display name, in characters.
+        public var maxDisplayNameLength: Int?
+        /// The maximum length of an avatar description, in characters.
+        public var maxAvatarDescriptionLength: Int?
+        /// The maximum length of a header description, in characters.
+        public var maxHeaderDescriptionLength: Int?
+        /// The maximum number of profile fields allowed per account.
+        public var maxProfileFields: Int?
+        /// The maximum length of a profile field name, in characters.
+        public var profileFieldNameLimit: Int?
+        /// The maximum length of a profile field value, in characters.
+        public var profileFieldValueLimit: Int?
 
         enum CodingKeys: String, CodingKey {
             case maxFeaturedTags
             case maxPinnedPosts = "maxPinnedStatuses"
+            case maxNoteLength
+            case maxDisplayNameLength
+            case maxAvatarDescriptionLength
+            case maxHeaderDescriptionLength
+            case maxProfileFields
+            case profileFieldNameLimit
+            case profileFieldValueLimit
         }
 
-        public init(maxFeaturedTags: Int? = nil, maxPinnedPosts: Int? = nil) {
+        public init(
+            maxFeaturedTags: Int? = nil,
+            maxPinnedPosts: Int? = nil,
+            maxNoteLength: Int? = nil,
+            maxDisplayNameLength: Int? = nil,
+            maxAvatarDescriptionLength: Int? = nil,
+            maxHeaderDescriptionLength: Int? = nil,
+            maxProfileFields: Int? = nil,
+            profileFieldNameLimit: Int? = nil,
+            profileFieldValueLimit: Int? = nil
+        ) {
             self.maxFeaturedTags = maxFeaturedTags
             self.maxPinnedPosts = maxPinnedPosts
+            self.maxNoteLength = maxNoteLength
+            self.maxDisplayNameLength = maxDisplayNameLength
+            self.maxAvatarDescriptionLength = maxAvatarDescriptionLength
+            self.maxHeaderDescriptionLength = maxHeaderDescriptionLength
+            self.maxProfileFields = maxProfileFields
+            self.profileFieldNameLimit = profileFieldNameLimit
+            self.profileFieldValueLimit = profileFieldValueLimit
         }
     }
 

@@ -99,6 +99,23 @@ final class AccountTests: XCTestCase {
         XCTAssertNotNil(result.emojis)
     }
 
+    func testDecodingMastodon46Fields() throws {
+        // arrange
+        let json = localContent("account_mastodon_4.6")
+        let decoder = TootDecoder()
+
+        // act
+        let result = try decoder.decode(Account.self, from: json)
+
+        // assert
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result.avatarDescription, "A test avatar")
+        XCTAssertEqual(result.headerDescription, "A test header image")
+        XCTAssertEqual(result.showMedia, true)
+        XCTAssertEqual(result.showMediaReplies, false)
+        XCTAssertEqual(result.showFeatured, true)
+    }
+
     func testDecodingVerifyCredentials() throws {
         // arrange
         let json = localContent("account_verify_credentials_condensed")

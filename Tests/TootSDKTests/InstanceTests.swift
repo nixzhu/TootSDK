@@ -255,4 +255,26 @@ final class InstanceTests: XCTestCase {
         let result = try decoder.decode(InstanceV2.self, from: json)
         XCTAssertEqual(result.thumbnail, nil)
     }
+
+    func testMastodon46V2() throws {
+        // arrange
+        let json = localContent("instancev2_mastodon_4.6")
+        let decoder = TootDecoder()
+
+        // act
+        let result = try decoder.decode(InstanceV2.self, from: json)
+
+        // assert
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result.apiVersions?.mastodon, 10)
+        XCTAssertEqual(result.wrapstodon, 2025)
+        XCTAssertEqual(result.thumbnail?.description, "The example instance logo")
+        XCTAssertEqual(result.configuration?.accounts?.maxNoteLength, 500)
+        XCTAssertEqual(result.configuration?.accounts?.maxDisplayNameLength, 30)
+        XCTAssertEqual(result.configuration?.accounts?.maxAvatarDescriptionLength, 1500)
+        XCTAssertEqual(result.configuration?.accounts?.maxHeaderDescriptionLength, 1500)
+        XCTAssertEqual(result.configuration?.accounts?.maxProfileFields, 4)
+        XCTAssertEqual(result.configuration?.accounts?.profileFieldNameLimit, 255)
+        XCTAssertEqual(result.configuration?.accounts?.profileFieldValueLimit, 255)
+    }
 }
