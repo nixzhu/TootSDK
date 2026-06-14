@@ -15,7 +15,7 @@ struct CreateCollection: AsyncParsableCommand {
     mutating func run() async throws {
         let client = try await TootClient(connect: auth.url, accessToken: auth.token)
         if auth.verbose { client.debugOn() }
-        let params = CreateCollectionParams(
+        let params = TootCreateCollectionParams(
             name: name,
             description: description,
             language: language,

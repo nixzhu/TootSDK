@@ -1,7 +1,7 @@
 import Foundation
 
 /// Represents a collection of accounts on the server.
-public struct Collection: Codable, Hashable, Identifiable, Sendable {
+public struct TootCollection: Codable, Hashable, Identifiable, Sendable {
 
     /// The internal database ID of the collection.
     public var id: String
@@ -46,7 +46,7 @@ public struct Collection: Codable, Hashable, Identifiable, Sendable {
     public var tag: Tag?
 
     /// The items currently in the collection.
-    public var items: [CollectionItem]?
+    public var items: [TootCollectionItem]?
 
     public init(
         id: String,
@@ -63,7 +63,7 @@ public struct Collection: Codable, Hashable, Identifiable, Sendable {
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
         tag: Tag? = nil,
-        items: [CollectionItem]? = nil
+        items: [TootCollectionItem]? = nil
     ) {
         self.id = id
         self.uri = uri

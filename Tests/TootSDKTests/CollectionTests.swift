@@ -9,7 +9,7 @@ final class CollectionTests: XCTestCase {
         let json = localContent("collection")
         let decoder = TootDecoder()
 
-        let result = try decoder.decode(Collection.self, from: json)
+        let result = try decoder.decode(TootCollection.self, from: json)
 
         XCTAssertEqual(result.id, "42")
         XCTAssertEqual(result.uri, "https://mastodon.example/collections/42")
@@ -32,7 +32,7 @@ final class CollectionTests: XCTestCase {
         let json = localContent("collection")
         let decoder = TootDecoder()
 
-        let collection = try decoder.decode(Collection.self, from: json)
+        let collection = try decoder.decode(TootCollection.self, from: json)
 
         let items = try XCTUnwrap(collection.items)
         XCTAssertEqual(items.count, 2)
@@ -55,7 +55,7 @@ final class CollectionTests: XCTestCase {
             """.utf8)
         let decoder = TootDecoder()
 
-        let item = try decoder.decode(CollectionItem.self, from: json)
+        let item = try decoder.decode(TootCollectionItem.self, from: json)
 
         XCTAssertEqual(item.id, "99")
         if case .unparsedByTootSDK(let raw) = item.state {
@@ -69,7 +69,7 @@ final class CollectionTests: XCTestCase {
         let json = localContent("collection_with_accounts")
         let decoder = TootDecoder()
 
-        let result = try decoder.decode(CollectionWithAccounts.self, from: json)
+        let result = try decoder.decode(TootCollectionWithAccounts.self, from: json)
 
         XCTAssertEqual(result.collection.id, "42")
         XCTAssertEqual(result.collection.name, "Swift Developers")

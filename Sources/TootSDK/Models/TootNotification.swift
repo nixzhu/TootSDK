@@ -13,7 +13,7 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
         post: Post? = nil,
         report: Report? = nil,
         relationshipSeveranceEvent: RelationshipSeveranceEvent? = nil,
-        collection: Collection? = nil,
+        collection: TootCollection? = nil,
         fallback: NotificationFallback? = nil
     ) {
         self.id = id
@@ -42,7 +42,7 @@ public struct TootNotification: Codable, Hashable, Identifiable, Sendable {
     /// Summary of the event that caused follow relationships to be severed. Attached when type of the notification is ``NotificationType/severedRelationships``.
     public var relationshipSeveranceEvent: RelationshipSeveranceEvent?
     /// The collection associated with the notification. Attached when type is ``NotificationType/addedToCollection`` or ``NotificationType/collectionUpdate``.
-    public var collection: Collection?
+    public var collection: TootCollection?
     /// Fallback rendering attributes for unsupported non-baseline notification types when the client sends ``supported_types``.
     public var fallback: NotificationFallback?
     /// The used emoji, available if type is ``NotificationType/emojiReaction`` and flavour provides it.

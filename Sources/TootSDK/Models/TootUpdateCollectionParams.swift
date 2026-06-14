@@ -1,7 +1,7 @@
 import Foundation
 
 /// Parameters for updating an existing collection.
-public struct UpdateCollectionParams: Codable, Sendable {
+public struct TootUpdateCollectionParams: Codable, Sendable {
 
     /// The user-defined title of the collection.
     public var name: String?
