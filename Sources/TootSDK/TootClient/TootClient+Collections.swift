@@ -8,7 +8,9 @@ extension TootClient {
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: a PagedResult with an array of collections if successful, throws an error if not
-    public func getAccountCollections(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> PagedResult<[Collection]> {
+    public func getAccountCollections(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> PagedResult<
+        [TootCollection]
+    > {
         let response = try await getAccountCollectionsRaw(accountId: accountId, pageInfo, limit: limit)
         return response.data
     }
@@ -20,7 +22,7 @@ extension TootClient {
     ///   - accountId: The ID of the account.
     /// - Returns: TootResponse containing paginated collections and HTTP metadata
     public func getAccountCollectionsRaw(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> TootResponse<
-        PagedResult<[Collection]>
+        PagedResult<[TootCollection]>
     > {
         try requireFeature(.collections)
         let req = HTTPRequestBuilder {
@@ -37,8 +39,9 @@ extension TootClient {
     /// - Parameters:
     ///   - accountId: The ID of the account.
     /// - Returns: a PagedResult with an array of collections if successful, throws an error if not
-    public func getAccountInCollections(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> PagedResult<[Collection]>
-    {
+    public func getAccountInCollections(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> PagedResult<
+        [TootCollection]
+    > {
         let response = try await getAccountInCollectionsRaw(accountId: accountId, pageInfo, limit: limit)
         return response.data
     }
@@ -50,7 +53,7 @@ extension TootClient {
     ///   - accountId: The ID of the account.
     /// - Returns: TootResponse containing paginated collections and HTTP metadata
     public func getAccountInCollectionsRaw(accountId: String, _ pageInfo: PagedInfo? = nil, limit: Int? = nil) async throws -> TootResponse<
-        PagedResult<[Collection]>
+        PagedResult<[TootCollection]>
     > {
         try requireFeature(.collections)
         let req = HTTPRequestBuilder {
@@ -64,8 +67,8 @@ extension TootClient {
     /// Fetch a collection by ID, including its member accounts.
     /// - Parameters:
     ///   - id: The ID of the collection.
-    /// - Returns: CollectionWithAccounts if successful, throws an error if not
-    public func getCollection(id: String) async throws -> CollectionWithAccounts {
+    /// - Returns: TootCollectionWithAccounts if successful, throws an error if not
+    public func getCollection(id: String) async throws -> TootCollectionWithAccounts {
         let response = try await getCollectionRaw(id: id)
         return response.data
     }
@@ -74,20 +77,20 @@ extension TootClient {
     /// - Parameters:
     ///   - id: The ID of the collection.
     /// - Returns: TootResponse containing the collection with accounts and HTTP metadata
-    public func getCollectionRaw(id: String) async throws -> TootResponse<CollectionWithAccounts> {
+    public func getCollectionRaw(id: String) async throws -> TootResponse<TootCollectionWithAccounts> {
         try requireFeature(.collections)
         let req = HTTPRequestBuilder {
             $0.url = getURL(["api", "v1", "collections", id])
             $0.method = .get
         }
-        return try await fetchRaw(CollectionWithAccounts.self, req)
+        return try await fetchRaw(TootCollectionWithAccounts.self, req)
     }
 
     /// Create a new collection.
     /// - Parameters:
     ///   - params: The parameters for the new collection.
-    /// - Returns: the created Collection if successful, throws an error if not
-    public func createCollection(params: CreateCollectionParams) async throws -> Collection {
+    /// - Returns: the created TootCollection if successful, throws an error if not
+    public func createCollection(params: TootCreateCollectionParams) async throws -> TootCollection {
         let response = try await createCollectionRaw(params: params)
         return response.data
     }
@@ -96,7 +99,7 @@ extension TootClient {
     /// - Parameters:
     ///   - params: The parameters for the new collection.
     /// - Returns: TootResponse containing the created collection and HTTP metadata
-    public func createCollectionRaw(params: CreateCollectionParams) async throws -> TootResponse<Collection> {
+    public func createCollectionRaw(params: TootCreateCollectionParams) async throws -> TootResponse<TootCollection> {
         try requireFeature(.collections)
         let req = try HTTPRequestBuilder {
             $0.url = getURL(["api", "v1", "collections"])
@@ -112,8 +115,8 @@ extension TootClient {
     /// - Parameters:
     ///   - id: The ID of the collection to update.
     ///   - params: The parameters to update.
-    /// - Returns: the updated Collection if successful, throws an error if not
-    public func updateCollection(id: String, params: UpdateCollectionParams) async throws -> Collection {
+    /// - Returns: the updated TootCollection if successful, throws an error if not
+    public func updateCollection(id: String, params: TootUpdateCollectionParams) async throws -> TootCollection {
         let response = try await updateCollectionRaw(id: id, params: params)
         return response.data
     }
@@ -123,7 +126,7 @@ extension TootClient {
     ///   - id: The ID of the collection to update.
     ///   - params: The parameters to update.
     /// - Returns: TootResponse containing the updated collection and HTTP metadata
-    public func updateCollectionRaw(id: String, params: UpdateCollectionParams) async throws -> TootResponse<Collection> {
+    public func updateCollectionRaw(id: String, params: TootUpdateCollectionParams) async throws -> TootResponse<TootCollection> {
         try requireFeature(.collections)
         let req = try HTTPRequestBuilder {
             $0.url = getURL(["api", "v1", "collections", id])
@@ -151,8 +154,8 @@ extension TootClient {
     /// - Parameters:
     ///   - id: The ID of the collection.
     ///   - accountId: The ID of the account to add.
-    /// - Returns: the created CollectionItem if successful, throws an error if not
-    public func addAccountToCollection(id: String, accountId: String) async throws -> CollectionItem {
+    /// - Returns: the created TootCollectionItem if successful, throws an error if not
+    public func addAccountToCollection(id: String, accountId: String) async throws -> TootCollectionItem {
         let response = try await addAccountToCollectionRaw(id: id, accountId: accountId)
         return response.data
     }
@@ -162,7 +165,7 @@ extension TootClient {
     ///   - id: The ID of the collection.
     ///   - accountId: The ID of the account to add.
     /// - Returns: TootResponse containing the created collection item and HTTP metadata
-    public func addAccountToCollectionRaw(id: String, accountId: String) async throws -> TootResponse<CollectionItem> {
+    public func addAccountToCollectionRaw(id: String, accountId: String) async throws -> TootResponse<TootCollectionItem> {
         try requireFeature(.collections)
         let body = ["account_id": accountId]
         let req = try HTTPRequestBuilder {
@@ -208,7 +211,7 @@ extension TootClient {
 
     /// Fetches a request whose body is `{"collections":[...]}` and assembles a PagedResult
     /// using the offset-based Link header pagination.
-    private func fetchPagedCollectionsRaw(_ req: HTTPRequestBuilder) async throws -> TootResponse<PagedResult<[Collection]>> {
+    private func fetchPagedCollectionsRaw(_ req: HTTPRequestBuilder) async throws -> TootResponse<PagedResult<[TootCollection]>> {
         let (data, response) = try await fetch(req: req)
         let container = try decode(CollectionsListContainer.self, from: data)
         return makePagedResultResponse(decoded: container.collections, response: response, data: data)
@@ -219,17 +222,17 @@ extension TootClient {
 
 /// Decodes `{"collections": [...]}` list responses.
 struct CollectionsListContainer: Decodable {
-    let collections: [Collection]
+    let collections: [TootCollection]
 }
 
 /// Decodes `{"collection": {...}}` single-object responses (create / update).
 struct CollectionContainer: Decodable {
-    let collection: Collection
+    let collection: TootCollection
 }
 
 /// Decodes `{"collection_item": {...}}` responses (add account to collection).
 struct CollectionItemContainer: Decodable {
-    let collectionItem: CollectionItem
+    let collectionItem: TootCollectionItem
 }
 
 extension TootFeature {

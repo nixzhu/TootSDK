@@ -15,7 +15,7 @@ struct UpdateCollection: AsyncParsableCommand {
     mutating func run() async throws {
         let client = try await TootClient(connect: auth.url, accessToken: auth.token)
         if auth.verbose { client.debugOn() }
-        let params = UpdateCollectionParams(
+        let params = TootUpdateCollectionParams(
             name: name,
             description: description,
             language: language,

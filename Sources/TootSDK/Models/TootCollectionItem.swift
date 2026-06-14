@@ -1,7 +1,7 @@
 import Foundation
 
 /// Represents a membership item within a collection.
-public struct CollectionItem: Codable, Hashable, Identifiable, Sendable {
+public struct TootCollectionItem: Codable, Hashable, Identifiable, Sendable {
 
     /// The lifecycle state of an account's membership in a collection.
     public enum State: String, Codable, Hashable, Sendable {

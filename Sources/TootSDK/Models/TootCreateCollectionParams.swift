@@ -1,7 +1,7 @@
 import Foundation
 
 /// Parameters for creating a new collection.
-public struct CreateCollectionParams: Codable, Sendable {
+public struct TootCreateCollectionParams: Codable, Sendable {
 
     /// The user-defined title of the collection.
     public var name: String
